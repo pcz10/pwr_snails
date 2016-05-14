@@ -3,9 +3,7 @@ package pwr_java_lab04;
 import java.awt.Color;
 import java.util.Random;
 
-import javax.swing.JComponent;
-
-public class Snail extends JComponent
+public class Snail implements Runnable
 {
 	public Snail(Meadow meadow)
 	{
@@ -14,6 +12,13 @@ public class Snail extends JComponent
 		setCoordinates();
 		System.out.println(this.toString());
 	}
+	
+	@Override
+	public void run() 
+	{
+		
+	}
+	
 	private Grass generateGrassField()
 	{	
 		Grass grass = generateRandomGrassFieldData();
@@ -34,6 +39,7 @@ public class Snail extends JComponent
 		this.x = this.grass.getX();
 		this.y = this.grass.getY();
 	}
+
 	
 	public Color getColor()
 	{
@@ -48,9 +54,10 @@ public class Snail extends JComponent
 		return this.y;
 	}
 	
+	
 	@Override
 	public String toString() {
-		return "Snail [grass=" + grass + ", x=" + x + ", y=" + y + "]";
+		return "\nSnail [grass=" + grass + ", x=" + x + ", y=" + y +"]";
 	}
 
 	private Grass grass;
@@ -58,5 +65,4 @@ public class Snail extends JComponent
 	private Color color = new Color(200,2,2);
 	private int x;
 	private int y;
-	private int appetite;
 }
