@@ -67,7 +67,7 @@ public class ControlPanel extends JPanel
 			g2.setColor(snail.getColor());
 			g2.fillOval(snail.getX(), snail.getY(), 64, 64);
 		}
-
+		repaint();
 	}
 	
 	private void setSnailButtonProperties() 
@@ -123,7 +123,6 @@ public class ControlPanel extends JPanel
 			world.getMeadow().getListOfSnail().add(snail);
 			Thread newSnailThread = new Thread(snail);
 			newSnailThread.start();
-			repaint();
 		}
 	}
 	private class AppetiteHandler implements ChangeListener

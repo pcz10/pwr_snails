@@ -23,15 +23,14 @@ public class World extends JComponent
 	}
 	public synchronized void reallocate(Snail snail)
 	{
-
 		System.out.println("CLASS :World ||| METHOD :reallocate");
 		int id = snail.getGrass().getFieldID();
-		if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
-			snail.setGrass(meadow.getListOfGrassFields().get(id+1));
+		if(!(meadow.getListOfGrassFields().get(id).isTaken()))
+			snail.setGrass(meadow.getListOfGrassFields().get(id));
 		else if(!(meadow.getListOfGrassFields().get(id-1).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-1));
-		else if(!(meadow.getListOfGrassFields().get(id+10).isTaken()))
-			snail.setGrass(meadow.getListOfGrassFields().get(id+10));
+		else if(!(meadow.getListOfGrassFields().get(id+9).isTaken()))
+			snail.setGrass(meadow.getListOfGrassFields().get(id+9));
 		else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-10));
 	}
