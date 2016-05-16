@@ -9,6 +9,13 @@ public class Meadow
 	{
 		fillListOfGrassFields();
 	}
+	public Grass returnFreeField(Grass grass)
+	{
+		int index = grass.getFieldID();
+		if(this.listOfGrassFields.get(index+1).isTaken())
+			return this.listOfGrassFields.get(index-1);
+		else return this.listOfGrassFields.get(index+1); 
+	}
 	public ArrayList<Snail> getListOfSnail()
 	{
 		return listOfSnails;

@@ -15,11 +15,12 @@ import javax.swing.event.ChangeListener;
 
 public class ControlPanel extends JPanel
 {
+
+	public static World world = new World();
+	
 	public ControlPanel()
 	{
-		
-		World world = new World();
-		this.world = world;
+		//this.world = world;
 		SnailHandler snailHandler = new SnailHandler();
 		JButton addSnailButton = new JButton("New snail");
 		this.addSnailButton = addSnailButton;
@@ -39,7 +40,7 @@ public class ControlPanel extends JPanel
 		JLabel grassGrowthSliderTitle = new JLabel("Grass growth speed slider");
 		this.grassGrowthSliderTitle = grassGrowthSliderTitle;
 		
-		JSlider changeGrassGrowthSlider = new JSlider(0,10,0);
+		JSlider changeGrassGrowthSlider = new JSlider(0,3,0);
 		this.changeGrassGrowthSlider = changeGrassGrowthSlider;
 		GrassGrowthHandler grassGrowthHandler = new GrassGrowthHandler();
 		changeGrassGrowthSlider.addChangeListener(grassGrowthHandler);
@@ -55,17 +56,18 @@ public class ControlPanel extends JPanel
 		setAppetiteSliderProperties(); 
 		setGrassGrowthSliderProperties();
 		
-		for(Grass grass : this.world.getMeadow().getListOfGrassFields())
+		for(Grass grass : world.getMeadow().getListOfGrassFields())
 		{
 			g2.setColor(grass.getColor());
 			g2.fillRect(grass.getX(), grass.getY(), 64, 64);
 		}
 		
-		for(Snail snail : this.world.getMeadow().getListOfSnail())
+		for(Snail snail : world.getMeadow().getListOfSnail())
 		{
 			g2.setColor(snail.getColor());
 			g2.fillOval(snail.getX(), snail.getY(), 64, 64);
 		}
+
 	}
 	
 	private void setSnailButtonProperties() 
@@ -78,7 +80,7 @@ public class ControlPanel extends JPanel
 	private void setAppetiteSliderProperties() 
 	{
 		changeAppetiteSlider.setLocation(700,220);
-		changeAppetiteSlider.setSize(180, 25);
+		//changeAppetiteSlider.setSize(180, 25);
 		createAppetiteSliderLabels();
 		changeAppetiteSlider.setVisible(true);
 		add(this.changeAppetiteSlider);
@@ -96,7 +98,7 @@ public class ControlPanel extends JPanel
 	private void setGrassGrowthSliderProperties()
 	{
 		changeGrassGrowthSlider.setLocation(700,320);
-		changeGrassGrowthSlider.setSize(180, 25);
+		//changeGrassGrowthSlider.setSize(180, 25);
 		createGrassGrowthSliderLabels();
 		changeGrassGrowthSlider.setVisible(true);
 		add(this.changeGrassGrowthSlider);
@@ -105,8 +107,9 @@ public class ControlPanel extends JPanel
 	{
 		changeGrassGrowthSlider.setPaintLabels(true);
 		Hashtable<Integer,JLabel> position = new Hashtable<>();
-		for(int i = 1; i<11; ++i)
-			position.put(i, new JLabel(""+i+""));
+		position.put(1, new JLabel("SLOW"));
+		position.put(2, new JLabel("MEDIUM"));
+		position.put(3, new JLabel("FAST"));
 		changeGrassGrowthSlider.setLabelTable(position);
 		grassGrowthSliderTitle.setLocation(700, 290);
 		add(this.grassGrowthSliderTitle);
@@ -116,7 +119,10 @@ public class ControlPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			world.getMeadow().getListOfSnail().add(new Snail(world.getMeadow()));
+			Snail snail = new Snail(world.getMeadow());
+			world.getMeadow().getListOfSnail().add(snail);
+			Thread newSnailThread = new Thread(snail);
+			newSnailThread.start();
 			repaint();
 		}
 	}
@@ -140,7 +146,7 @@ public class ControlPanel extends JPanel
 			System.out.println(world.getGrassGrowthSpeed());
 		}
 	}
-	private World world;
+
 	private JButton addSnailButton;
 	private JSlider changeAppetiteSlider;
 	private JSlider changeGrassGrowthSlider;

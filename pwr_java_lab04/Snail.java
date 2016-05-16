@@ -5,20 +5,39 @@ import java.util.Random;
 
 public class Snail implements Runnable
 {
+	public long threadID;
 	public Snail(Meadow meadow)
 	{
 		this.controlVar = meadow;
 		generateGrassField();
 		setCoordinates();
 		System.out.println(this.toString());
+		this.snail = this;
 	}
 	
 	@Override
 	public void run() 
 	{
+		threadID = Thread.currentThread().getId();
 		
+		while(true)
+		{
+			sleep(1);
+			ControlPanel.world.moveSnail(this.snail);
+			System.out.println("debug print " + this.grass + this.threadID);
+		}
 	}
 	
+
+    private void sleep(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    
+    
 	private Grass generateGrassField()
 	{	
 		Grass grass = generateRandomGrassFieldData();
@@ -39,11 +58,18 @@ public class Snail implements Runnable
 		this.x = this.grass.getX();
 		this.y = this.grass.getY();
 	}
-
-	
+	public void setGrass(Grass grass)
+	{
+		this.grass = grass;
+		this.setCoordinates();
+	}
 	public Color getColor()
 	{
 		return color;
+	}
+	public Grass getGrass()
+	{
+		return grass;
 	}
 	public int getX()
 	{
@@ -59,7 +85,7 @@ public class Snail implements Runnable
 	public String toString() {
 		return "\nSnail [grass=" + grass + ", x=" + x + ", y=" + y +"]";
 	}
-
+	private Snail snail;
 	private Grass grass;
 	private Meadow controlVar;
 	private Color color = new Color(200,2,2);
