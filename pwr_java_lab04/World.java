@@ -1,6 +1,8 @@
 package pwr_java_lab04;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
@@ -12,17 +14,16 @@ public class World extends JComponent
 			return false;
 		return true;
 	}
-	public synchronized void moveSnail(Snail snail)
+	public void moveSnail(Snail snail)
 	{
 		reallocate(snail);	
 	}
-	public synchronized void reallocate(Snail snail)
+	public void reallocate(Snail snail)
 	{
-		System.out.println("CLASS :World ||| METHOD :reallocate");
 		int id = snail.getGrass().getFieldID();
 		Grass grass = snail.getGrass();
-		System.out.println("grass id =" + snail.getGrass().getFieldID());
-		if(snail.getGrass().getFieldID()<99)
+		synchronized (grass){
+			if(snail.getGrass().getFieldID()<99)
 		{
 			if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
 				snail.setGrass(meadow.getListOfGrassFields().get(id+1));
@@ -38,20 +39,23 @@ public class World extends JComponent
 		}
 		else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-10));
-		
+		}
 		grass.setTaken(false);
 		snail.getGrass().setTaken(true);
 	}
-	public synchronized void eat(Snail snail)
+	public void eat(Snail snail)
 	{
 		changeGrassLevel(snail);
 	}
-	public synchronized void changeGrassLevel(Snail snail)
+	public void changeGrassLevel(Snail snail)
 	{
-		for(int i = 0; i<World.grassColors.length; ++i)
+		if(isGrassLeft(snail))
 		{
-			snail.getGrass().setColor(World.grassColors[i]);
-			snail.sleep(1);
+			for(int i = 0; i<World.grassColors.length; ++i)
+			{
+				snail.getGrass().setColor(World.grassColors[i]);
+				snail.sleep(1);
+			}
 		}
 	}
 	

@@ -22,11 +22,10 @@ public class Snail implements Runnable
 		
 		while(true)
 		{
-
 			ControlPanel.world.eat(this.snail);
+			sleep(1);
 			if(!(ControlPanel.world.isGrassLeft(this.snail)));
 				ControlPanel.world.moveSnail(this.snail);
-			System.out.println("debug print " + this.grass + this.threadID);
 		}
 	}
     void sleep(int seconds) {
