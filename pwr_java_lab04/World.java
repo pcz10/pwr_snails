@@ -1,8 +1,8 @@
 package pwr_java_lab04;
 
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JComponent;
 
@@ -11,6 +11,12 @@ public class World extends JComponent
 	public boolean isGrassLeft(Snail snail)
 	{
 		if(snail.getGrass().isNoLeft())
+			return false;
+		return true;
+	}
+	public boolean isSecondGrassFieldLeft(Snail snail)
+	{
+		if(snail.getSecondOccupiedGrassField().isNoLeft())
 			return false;
 		return true;
 	}
@@ -25,27 +31,34 @@ public class World extends JComponent
 		synchronized (grass){
 			if(snail.getGrass().getFieldID()<99)
 		{
-			if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
-				snail.setGrass(meadow.getListOfGrassFields().get(id+1));
-
-			else if(!(meadow.getListOfGrassFields().get(id+10).isTaken()))
-				snail.setGrass(meadow.getListOfGrassFields().get(id+10));
-			
-			else if(!(meadow.getListOfGrassFields().get(id-1).isTaken()))
-				snail.setGrass(meadow.getListOfGrassFields().get(id-1));
-			
-			else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
-				snail.setGrass(meadow.getListOfGrassFields().get(id-10));
+			snail.setGrass(randomizeNewField(snail, id));
 		}
 		else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-10));
 		}
 		grass.setTaken(false);
+		snail.getSecondOccupiedGrassField().setTaken(false);
 		snail.getGrass().setTaken(true);
+	}
+	private Grass randomizeNewField(Snail snail, int id) 
+	{
+		ArrayList<Grass> randomFields = new ArrayList<>();
+		fillRandomList(id, randomFields);
+		Random randomFieldGenerator = new Random();
+		int index = randomFieldGenerator.nextInt(randomFields.size());
+		Grass grass = randomFields.get(index);
+		return grass;
+	}
+	private void fillRandomList(int id, ArrayList<Grass> randomFields) {
+		randomFields.add(meadow.getListOfGrassFields().get(id+1));
+		randomFields.add(meadow.getListOfGrassFields().get(id+10));
+		randomFields.add(meadow.getListOfGrassFields().get(id-1));
+		randomFields.add(meadow.getListOfGrassFields().get(id-10));
 	}
 	public void eat(Snail snail)
 	{
 		snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
+		snail.getSecondOccupiedGrassField().setTaken(true);
 		changeGrassLevel(snail);
 	}
 	public void changeGrassLevel(Snail snail)
