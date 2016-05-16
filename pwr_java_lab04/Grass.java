@@ -17,11 +17,11 @@ public class Grass
 	}
 	public boolean isNoLeft()
 	{
-		if(startColor == grassColors[7])
+		if(startColor == World.grassColors[7])
 			return true;
 		return false;
 	}
-	public  void setTaken(boolean state)
+	public void setTaken(boolean state)
 	{
 		this.taken = state;
 	}
@@ -41,6 +41,10 @@ public class Grass
 	{
 		return fieldID;
 	}
+	public void setColor(Color color)
+	{
+		startColor = color;
+	}
 	@Override
 	public String toString() {
 		return "\nGrass [taken=" + taken + ", x=" + x + ", y=" + y + ", startColor = " + startColor + " field id = " + fieldID + "]";
@@ -51,17 +55,7 @@ public class Grass
 	private int y;
 	public static final int grassFieldWidth = 64;
 	public static final int grassFieldHeight = 64;
-	private Color[] grassColors = 
-	{
-		new Color(0,51,0),
-		new Color(0,102,0),
-		new Color(0,153,0),
-		new Color(0,204,0),
-		new Color(51,255,51),
-		new Color(102,255,102),
-		new Color(153,255,153),
-		new Color(102,51,0),
-	};
-	private Color startColor = grassColors[7];
+
+	private Color startColor = World.grassColors[0];
 	private static int idHelper = 0;
 }

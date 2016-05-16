@@ -67,6 +67,7 @@ public class ControlPanel extends JPanel
 			g2.setColor(snail.getColor());
 			g2.fillOval(snail.getX(), snail.getY(), 64, 64);
 		}
+		
 		repaint();
 	}
 	
@@ -80,7 +81,6 @@ public class ControlPanel extends JPanel
 	private void setAppetiteSliderProperties() 
 	{
 		changeAppetiteSlider.setLocation(700,220);
-		//changeAppetiteSlider.setSize(180, 25);
 		createAppetiteSliderLabels();
 		changeAppetiteSlider.setVisible(true);
 		add(this.changeAppetiteSlider);
