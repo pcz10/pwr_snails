@@ -25,12 +25,15 @@ public class World extends JComponent
 	{
 		System.out.println("CLASS :World ||| METHOD :reallocate");
 		int id = snail.getGrass().getFieldID();
-		if(!(meadow.getListOfGrassFields().get(id).isTaken()))
-			snail.setGrass(meadow.getListOfGrassFields().get(id));
+		if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
+			snail.setGrass(meadow.getListOfGrassFields().get(id+1));
+		
 		else if(!(meadow.getListOfGrassFields().get(id-1).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-1));
+		
 		else if(!(meadow.getListOfGrassFields().get(id+9).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id+9));
+		
 		else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
 			snail.setGrass(meadow.getListOfGrassFields().get(id-10));
 	}

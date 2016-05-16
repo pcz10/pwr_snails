@@ -8,7 +8,7 @@ public class Grass
 	{
 		this.x = x;
 		this.y = y;
-		this.fieldID = ++idHelper;
+		this.fieldID = idHelper++;
 	}
 
 	public  boolean isTaken()
