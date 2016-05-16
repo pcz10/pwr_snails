@@ -27,12 +27,12 @@ public class World extends JComponent
 		{
 			if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
 				snail.setGrass(meadow.getListOfGrassFields().get(id+1));
-		
+
+			else if(!(meadow.getListOfGrassFields().get(id+10).isTaken()))
+				snail.setGrass(meadow.getListOfGrassFields().get(id+10));
+			
 			else if(!(meadow.getListOfGrassFields().get(id-1).isTaken()))
 				snail.setGrass(meadow.getListOfGrassFields().get(id-1));
-			
-			else if(!(meadow.getListOfGrassFields().get(id+9).isTaken()))
-				snail.setGrass(meadow.getListOfGrassFields().get(id+9));
 			
 			else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
 				snail.setGrass(meadow.getListOfGrassFields().get(id-10));
@@ -45,6 +45,7 @@ public class World extends JComponent
 	}
 	public void eat(Snail snail)
 	{
+		snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
 		changeGrassLevel(snail);
 	}
 	public void changeGrassLevel(Snail snail)
@@ -54,12 +55,32 @@ public class World extends JComponent
 			for(int i = 0; i<World.grassColors.length; ++i)
 			{
 				snail.getGrass().setColor(World.grassColors[i]);
+				snail.getSecondOccupiedGrassField().setColor(World.grassColors[i]);
 				snail.sleep(1);
 			}
 		}
 	}
-	
-		
+	private Grass generateOccupiedGrassField(Snail snail)
+	{
+		int id = snail.getGrass().getFieldID();
+		Grass grass;
+		if(meadow.getListOfGrassFields().get(id+10).isTaken())
+		{
+			if(meadow.getListOfGrassFields().get(id-10).isTaken())
+			{
+				if(meadow.getListOfGrassFields().get(id+1).isTaken())
+				{
+					System.out.println("dupa");
+				}
+				else 
+					return grass = meadow.getListOfGrassFields().get(id+1);
+			}
+			else
+				return grass = meadow.getListOfGrassFields().get(id-11);	
+		}
+		grass = meadow.getListOfGrassFields().get(id+10);
+		return grass;
+	}
 	public int setAppetite(int appetiteValueFromSlider)
 	{
 		return this.snailsAppetite = appetiteValueFromSlider;

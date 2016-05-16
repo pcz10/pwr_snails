@@ -78,14 +78,21 @@ public class Snail implements Runnable
 	{
 		return this.y;
 	}
-	
-	
+	public Grass getSecondOccupiedGrassField()
+	{
+		return this.secondOccupiedGrassField;
+	}
+	public void setSecondOccupiedGrassField(Grass grass)
+	{
+		this.secondOccupiedGrassField = grass;
+	}
 	@Override
 	public String toString() {
 		return "\nSnail [grass=" + grass + ", x=" + x + ", y=" + y +"]";
 	}
 	private Snail snail;
 	private Grass grass;
+	private Grass secondOccupiedGrassField;
 	private Meadow controlVar;
 	private Color color = new Color(200,2,2);
 	private int x;
