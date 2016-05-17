@@ -48,7 +48,7 @@ public class Snail implements Runnable
 	private Grass generateRandomGrassFieldData()
 	{	
 		Random randomGenerator = new Random();
-		int index = randomGenerator.nextInt(controlVar.getListOfGrassFields().size());
+		int index = randomGenerator.nextInt(controlVar.getListOfGrassFields().size()-11);
 		Grass grass = controlVar.getListOfGrassFields().get(index);
 		return grass;
 	}

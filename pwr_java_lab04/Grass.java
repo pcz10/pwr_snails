@@ -17,7 +17,7 @@ public class Grass
 	}
 	public boolean isNoLeft()
 	{
-		if(startColor == World.grassColors[7])
+		if(startColor == World.grassColors[0])
 			return true;
 		return false;
 	}
@@ -49,6 +49,7 @@ public class Grass
 	public String toString() {
 		return "\nGrass [taken=" + taken + ", x=" + x + ", y=" + y + ", startColor = " + startColor + " field id = " + fieldID + "]";
 	}
+	
 	private boolean taken = false;
 	private int fieldID;
 	private int x;
@@ -56,6 +57,6 @@ public class Grass
 	public static final int grassFieldWidth = 64;
 	public static final int grassFieldHeight = 64;
 
-	private Color startColor = World.grassColors[0];
+	private Color startColor = World.grassColors[7];
 	private static int idHelper = 0;
 }

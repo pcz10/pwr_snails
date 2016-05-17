@@ -15,11 +15,12 @@ import javax.swing.event.ChangeListener;
 
 public class ControlPanel extends JPanel
 {
-
 	public static World world = new World();
 	
 	public ControlPanel()
 	{
+		Thread newWorldThread = new Thread(world.getMeadow());
+		newWorldThread.start();
 		//this.world = world;
 		SnailHandler snailHandler = new SnailHandler();
 		JButton addSnailButton = new JButton("New snail");
@@ -32,7 +33,7 @@ public class ControlPanel extends JPanel
 		JLabel appetiteSliderTitle = new JLabel("Snails appetite slider");
 		this.appetiteSliderTitle = appetiteSliderTitle;
 		
-		JSlider changeAppetiteSlider = new JSlider(0,10,0);
+		JSlider changeAppetiteSlider = new JSlider(0,1,0);
 		this.changeAppetiteSlider = changeAppetiteSlider;
 		AppetiteHandler appetiteHandler = new AppetiteHandler();
 		changeAppetiteSlider.addChangeListener(appetiteHandler);
@@ -40,7 +41,7 @@ public class ControlPanel extends JPanel
 		JLabel grassGrowthSliderTitle = new JLabel("Grass growth speed slider");
 		this.grassGrowthSliderTitle = grassGrowthSliderTitle;
 		
-		JSlider changeGrassGrowthSlider = new JSlider(0,3,0);
+		JSlider changeGrassGrowthSlider = new JSlider(0,4,0);
 		this.changeGrassGrowthSlider = changeGrassGrowthSlider;
 		GrassGrowthHandler grassGrowthHandler = new GrassGrowthHandler();
 		changeGrassGrowthSlider.addChangeListener(grassGrowthHandler);
@@ -89,8 +90,8 @@ public class ControlPanel extends JPanel
 	{
 		changeAppetiteSlider.setPaintLabels(true);
 		Hashtable<Integer,JLabel> position = new Hashtable<>();
-		for(int i = 1; i<11; ++i)
-			position.put(i, new JLabel(""+i+""));
+		position.put(0, new JLabel("NOT HUNGRY"));
+		position.put(1, new JLabel("HUNGRY"));
 		changeAppetiteSlider.setLabelTable(position);
 		appetiteSliderTitle.setLocation(700, 190);
 		add(this.appetiteSliderTitle);
@@ -107,9 +108,9 @@ public class ControlPanel extends JPanel
 	{
 		changeGrassGrowthSlider.setPaintLabels(true);
 		Hashtable<Integer,JLabel> position = new Hashtable<>();
-		position.put(1, new JLabel("SLOW"));
-		position.put(2, new JLabel("MEDIUM"));
-		position.put(3, new JLabel("FAST"));
+		position.put(0, new JLabel("0"));
+		position.put(1, new JLabel("FASTEST"));
+		position.put(4, new JLabel("SLOWEST"));
 		changeGrassGrowthSlider.setLabelTable(position);
 		grassGrowthSliderTitle.setLocation(700, 290);
 		add(this.grassGrowthSliderTitle);
