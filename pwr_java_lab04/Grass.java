@@ -51,12 +51,12 @@ public class Grass
 	}
 	
 	private boolean taken = false;
-	private int fieldID;
+	private int fieldID=0;
 	private int x;
 	private int y;
 	public static final int grassFieldWidth = 64;
 	public static final int grassFieldHeight = 64;
 
 	private Color startColor = World.grassColors[7];
-	private static int idHelper = 0;
+	private static int idHelper = 1;
 }

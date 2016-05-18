@@ -12,7 +12,6 @@ public class Snail implements Runnable
 		generateGrassField();
 		setCoordinates();
 		System.out.println(this.toString());
-		this.snail = this;
 	}
 	
 	@Override
@@ -22,10 +21,10 @@ public class Snail implements Runnable
 		
 		while(true)
 		{
-			ControlPanel.world.eat(this.snail);
+			ControlPanel.world.eat(this);
 			sleep(1);
-			if(!(ControlPanel.world.isGrassLeft(this.snail)));
-				ControlPanel.world.moveSnail(this.snail);
+			if(!(ControlPanel.world.isGrassLeft(this)));
+				ControlPanel.world.moveSnail(this);
 		}
 	}
     void sleep(int seconds) {
@@ -90,7 +89,6 @@ public class Snail implements Runnable
 	public String toString() {
 		return "\nSnail [grass=" + grass + ", x=" + x + ", y=" + y +"]";
 	}
-	private Snail snail;
 	private Grass grass;
 	private Grass secondOccupiedGrassField;
 	private Meadow controlVar;
