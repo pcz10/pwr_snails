@@ -10,9 +10,12 @@ public class World extends JComponent
 {	
 	public boolean isGrassLeft(Snail snail)
 	{
-		if(snail.getGrass().isNoLeft())
-			return false;
-		return true;
+		synchronized(snail.getGrass())
+		{
+			if(snail.getGrass().isNoLeft())
+				return false;
+			return true;
+		}
 	}
 	public boolean isSecondGrassFieldLeft(Snail snail)
 	{
@@ -22,22 +25,22 @@ public class World extends JComponent
 	}
 	public void moveSnail(Snail snail)
 	{    
-		reallocate(snail);	
-	}
-	public void reallocate(Snail snail)
-	{
 		Grass grass = snail.getGrass();
+		Grass grassOccupied = snail.getSecondOccupiedGrassField();
 		int id = grass.getFieldID()-1;
 			try 
 			{
 			snail.setGrass(randomizeNewField(id, snail));
+			snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
 			}
 			catch(ArrayIndexOutOfBoundsException e)
 			{
 				snail.setGrass(randomizeNewField(id,snail));
+				snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
 			}
 		grass.setTaken(false);
-		//snail.getSecondOccupiedGrassField().setTaken(false);
+		grassOccupied.setTaken(false);
+		snail.getSecondOccupiedGrassField().setTaken(true);
 		snail.getGrass().setTaken(true);
 	}
 	
@@ -45,10 +48,8 @@ public class World extends JComponent
 	{
 		ArrayList<Grass> randomFields = new ArrayList<>();
 		fillRandomList(id,snail, randomFields);
-		Random randomFieldGenerator = new Random();
-		int index = randomFieldGenerator.nextInt(randomFields.size());
-		Grass grass = randomFields.get(index);
-		return grass;
+		return selectNewRandomField(randomFields);
+		
 	}
 	private void fillRandomList(int id,Snail snail, ArrayList<Grass> randomFields) 
 	{
@@ -56,7 +57,6 @@ public class World extends JComponent
 		{
 			if(snail.getX()>63 && snail.getX() <576)
 			{
-				System.out.println("DOES ID == ID2 ?? "+id);
 				randomFields.add(meadow.getListOfGrassFields().get(id+10));
 				randomFields.add(meadow.getListOfGrassFields().get(id+1));
 				randomFields.add(meadow.getListOfGrassFields().get(id-10));
@@ -66,11 +66,6 @@ public class World extends JComponent
 				randomFields.add(meadow.getListOfGrassFields().get(id+10));
 			else if(snail.getX()>575)
 				randomFields.add(meadow.getListOfGrassFields().get(id-10));
-			for(Grass grass : randomFields)
-			{
-				System.out.println("ARRAY OF RANDOM LIST : "+ grass.toString());
-				System.out.println("\n"+snail.getGrass().getFieldID());
-			}
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{}
@@ -78,56 +73,49 @@ public class World extends JComponent
 	
 	public void eat(Snail snail)
 	{
-		//snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
-		
-			for(int i = meadow.findActualGrassColor(snail.getGrass()); i >0; ++i)
+		int actualIndex = meadow.findActualGrassColor(snail.getGrass());
+			for(int i = actualIndex; i < grassColors.length; ++i)
 			{
 				snail.getGrass().setColor(grassColors[i]);
-			//	snail.getSecondOccupiedGrassField().setColor(grassColors[i]);
+				snail.getSecondOccupiedGrassField().setColor(grassColors[i]);
+				snail.sleep(1);
 			}
 	}
 	
-	private Grass generateOccupiedGrassField(Snail snail)
+	public Grass generateOccupiedGrassField(Snail snail)
 	{
-		int id = snail.getGrass().getFieldID();
-		Grass grass = null;
-		fillOccupiedFieldsList(id, snail);
-		if(id < 91 && id > 10)
-		{
-			if(!(meadow.getListOfGrassFields().get(id+10).isTaken()))
-				return grass = occupiedFields.get(0);
-			else if(!(meadow.getListOfGrassFields().get(id-10).isTaken()))
-				return grass = occupiedFields.get(1);
-			else if(!(meadow.getListOfGrassFields().get(id+1).isTaken()))
-				return grass = occupiedFields.get(2);
-			else if(!(meadow.getListOfGrassFields().get(id-1).isTaken()))	
-				return grass = occupiedFields.get(3);
-		}
-		else if(id>90 && !(meadow.getListOfGrassFields().get(id-10).isTaken())) 
-				return grass = occupiedFields.get(0);
-		else if(id <11 && !(meadow.getListOfGrassFields().get(id+10).isTaken()))
-				return grass = occupiedFields.get(0);
+		ArrayList<Grass> occupiedFields = new ArrayList<>();
+		int id = snail.getGrass().getFieldID()-1;
+		occupiedFields = fillOccupiedFieldsList(id, snail, occupiedFields);
+		return selectNewRandomField(occupiedFields);
+	}
+	
+	private Grass selectNewRandomField(ArrayList<Grass> occupiedFields) 
+	{
+		Random randomFieldGenerator = new Random();
+		int index = randomFieldGenerator.nextInt(occupiedFields.size());
+		Grass grass = occupiedFields.get(index);
 		return grass;
 	}
-	private ArrayList<Grass> fillOccupiedFieldsList(int id,Snail snail) {
-		ArrayList<Grass> occupiedFields = new ArrayList<>();
+	private ArrayList<Grass> fillOccupiedFieldsList(int id,Snail snail,ArrayList<Grass> occupiedFields) 
+	{
 		try 
 		{
-			if(id<91 && id>10)
+			if(snail.getX()>63 && snail.getX() <576)
 			{	
 				occupiedFields.add(meadow.getListOfGrassFields().get(id+10));
 				occupiedFields.add(meadow.getListOfGrassFields().get(id-10));
 				occupiedFields.add(meadow.getListOfGrassFields().get(id+1));
 				occupiedFields.add(meadow.getListOfGrassFields().get(id-1));
 			}
-			else if(id<11)
+			else if(snail.getX()<64)
 				occupiedFields.add(meadow.getListOfGrassFields().get(id+10));
-			else if(id>90)
+			else if(snail.getX()>575)
 				occupiedFields.add(meadow.getListOfGrassFields().get(id-10));
 		}	
 		catch(ArrayIndexOutOfBoundsException e)
 		{}
-		this.occupiedFields = occupiedFields;
+
 		return occupiedFields;
 	}
 
@@ -156,7 +144,7 @@ public class World extends JComponent
 	{
 		return grassColors;
 	}
-	private ArrayList<Grass> occupiedFields = new ArrayList<>();
+
 
 	private Meadow meadow = new Meadow();
 	private int snailsAppetite;

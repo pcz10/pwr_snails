@@ -10,6 +10,7 @@ public class Snail implements Runnable
 	{
 		this.controlVar = meadow;
 		generateGrassField();
+		this.secondOccupiedGrassField = ControlPanel.world.generateOccupiedGrassField(this);
 		setCoordinates();
 		System.out.println(this.toString());
 	}
@@ -21,13 +22,15 @@ public class Snail implements Runnable
 		
 		while(true)
 		{
-			ControlPanel.world.eat(this);
-			sleep(1);
+			if(ControlPanel.world.getSnailsAppetite()>0)
+				ControlPanel.world.eat(this);
+			
 			if(!(ControlPanel.world.isGrassLeft(this)));
 				ControlPanel.world.moveSnail(this);
+			sleep(1);
 		}
 	}
-    void sleep(int seconds) {
+    public void sleep(int seconds) {
         try {
             Thread.sleep(seconds * 1000);
         } catch(InterruptedException ex) {
