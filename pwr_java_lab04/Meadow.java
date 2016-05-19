@@ -33,11 +33,8 @@ public class Meadow implements Runnable
 	{
 		for(Grass grass : this.listOfGrassFields)
 		{
-			synchronized (grass)
-			{
-				if(!(grass.isTaken()) && !(grass.getColor() == World.grassColors[0]))
-					grass.setColor(World.grassColors[findActualGrassColor(grass)-1]);
-			}
+			if(!(grass.isTaken()) && !(grass.getColor() == World.grassColors[0]))
+				grass.setColor(World.grassColors[findActualGrassColor(grass)-1]);
 		}
 	}
 	public int findActualGrassColor(Grass grass)
@@ -51,14 +48,6 @@ public class Meadow implements Runnable
 				--helperIndex;
 			return helperIndex;
 		}
-	}
-	
-	public Grass returnFreeField(Grass grass)
-	{
-		int index = grass.getFieldID();
-		if(this.listOfGrassFields.get(index+1).isTaken())
-			return this.listOfGrassFields.get(index-1);
-		else return this.listOfGrassFields.get(index+1); 
 	}
 	public ArrayList<Snail> getListOfSnail()
 	{
@@ -75,7 +64,6 @@ public class Meadow implements Runnable
 			{
 				this.listOfGrassFields.add(new Grass(i,j));
 			} 	
-		System.out.println(this.listOfGrassFields);
 	}
 	
 	private ArrayList<Grass> listOfGrassFields = new ArrayList<>();

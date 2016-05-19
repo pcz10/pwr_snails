@@ -17,7 +17,7 @@ public class Grass
 	}
 	public boolean isNoLeft()
 	{
-		if(startColor == World.grassColors[0])
+		if(startColor == World.grassColors[7])
 			return true;
 		return false;
 	}
