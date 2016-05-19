@@ -10,7 +10,7 @@ public class Snail implements Runnable
 	{
 		this.controlVar = meadow;
 		generateGrassField();
-		this.secondOccupiedGrassField = ControlPanel.world.generateOccupiedGrassField(this);
+	//	this.secondOccupiedGrassField = ControlPanel.world.generateOccupiedGrassField(this);
 		setCoordinates();
 		System.out.println(this.toString());
 	}

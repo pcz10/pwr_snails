@@ -26,7 +26,9 @@ public class World extends JComponent
 		int id = grass.getFieldID()-1;
 			try 
 			{
-				snail.setGrass(randomizeNewField(id, snail));
+				Grass newGrass = randomizeNewField(id, snail);
+				snail.setGrass(newGrass);
+				grass.setTaken(false);
 			}
 			catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -49,7 +51,6 @@ public class World extends JComponent
 				}
 				snail.sleep(1);
 			}
-		snail.getGrass().setTaken(false);
 		snail.getSecondOccupiedGrassField().setTaken(false);
 	}
 	
@@ -92,15 +93,15 @@ public class World extends JComponent
 		return selectNewRandomField(occupiedFields,snail);
 	}
 	
-	private Grass selectNewRandomField(ArrayList<Grass> occupiedFields,Snail snail) 
+	private Grass selectNewRandomField(ArrayList<Grass> fieldsArray,Snail snail) 
 	{
 		Random randomFieldGenerator = new Random();
-		int index = randomFieldGenerator.nextInt(occupiedFields.size());
-		while(occupiedFields.get(index).isTaken() && occupiedFields.get(index).equals(snail.getGrass()))
+		int index = randomFieldGenerator.nextInt(fieldsArray.size());
+		while(fieldsArray.get(index).isTaken() || fieldsArray.get(index).equals(snail.getGrass()))
 		{
-			index = randomFieldGenerator.nextInt(occupiedFields.size());
+			index = randomFieldGenerator.nextInt(fieldsArray.size());
 		}
-		Grass grass = occupiedFields.get(index);
+		Grass grass = fieldsArray.get(index);
 		grass.setTaken(true);
 		return grass;
 	}
