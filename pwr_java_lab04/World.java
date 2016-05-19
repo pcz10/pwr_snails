@@ -10,9 +10,9 @@ public class World extends JComponent
 {	
 	public boolean isGrassLeft(Snail snail)
 	{
-			if(snail.getGrass().isNoLeft())
-				return false;
-			return true;
+		if(snail.getGrass().isNoLeft())
+			return false;
+		return true;
 	}
 	public boolean isSecondGrassFieldLeft(Snail snail)
 	{
@@ -26,9 +26,12 @@ public class World extends JComponent
 		int id = grass.getFieldID()-1;
 			try 
 			{
-				Grass newGrass = randomizeNewField(id, snail);
-				snail.setGrass(newGrass);
-				grass.setTaken(false);
+				synchronized(meadow.getListOfGrassFields())
+				{
+					Grass newGrass = randomizeNewField(id, snail);
+					snail.setGrass(newGrass);
+					grass.setTaken(false);
+				}
 			}
 			catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -37,7 +40,10 @@ public class World extends JComponent
 	}
 	public void eat(Snail snail)
 	{
+		synchronized(meadow.getListOfGrassFields())
+		{
 		snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
+		}
 		int actualColorIndex = meadow.findActualGrassColor(snail.getGrass());
 		int actualColorOccpiedIndex = meadow.findActualGrassColor(snail.getSecondOccupiedGrassField());
 	
@@ -95,15 +101,16 @@ public class World extends JComponent
 	
 	private Grass selectNewRandomField(ArrayList<Grass> fieldsArray,Snail snail) 
 	{
-		Random randomFieldGenerator = new Random();
-		int index = randomFieldGenerator.nextInt(fieldsArray.size());
-		while(fieldsArray.get(index).isTaken() || fieldsArray.get(index).equals(snail.getGrass()))
-		{
-			index = randomFieldGenerator.nextInt(fieldsArray.size());
-		}
-		Grass grass = fieldsArray.get(index);
-		grass.setTaken(true);
-		return grass;
+		
+			Random randomFieldGenerator = new Random();
+			int index = randomFieldGenerator.nextInt(fieldsArray.size());
+			while(fieldsArray.get(index).isTaken() || fieldsArray.get(index).equals(snail.getGrass()))
+			{
+				index = randomFieldGenerator.nextInt(fieldsArray.size());
+			}
+			Grass grass = fieldsArray.get(index);
+			grass.setTaken(true);
+			return grass;
 	}
 	private ArrayList<Grass> fillOccupiedFieldsList(int id,Snail snail,ArrayList<Grass> occupiedFields) 
 	{
