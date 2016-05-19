@@ -30,8 +30,11 @@ public class World extends JComponent
 		int id = grass.getFieldID()-1;
 			try 
 			{
-			snail.setGrass(randomizeNewField(id, snail));
-			snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
+				synchronized (grass)
+				{
+					snail.setGrass(randomizeNewField(id, snail));
+					snail.setSecondOccupiedGrassField(generateOccupiedGrassField(snail));
+				}
 			}
 			catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -74,12 +77,20 @@ public class World extends JComponent
 	public void eat(Snail snail)
 	{
 		int actualIndex = meadow.findActualGrassColor(snail.getGrass());
-			for(int i = actualIndex; i < grassColors.length; ++i)
+		int actualOccpiedIndex = meadow.findActualGrassColor(snail.getSecondOccupiedGrassField());
+		synchronized (snail.getSecondOccupiedGrassField())
+		{
+			for(int i = actualOccpiedIndex; i < grassColors.length; ++i)
 			{
-				snail.getGrass().setColor(grassColors[i]);
 				snail.getSecondOccupiedGrassField().setColor(grassColors[i]);
+				if(actualIndex<8)
+				{
+					snail.getGrass().setColor(grassColors[actualIndex]);
+					actualIndex+=1;
+				}
 				snail.sleep(1);
 			}
+		}
 	}
 	
 	public Grass generateOccupiedGrassField(Snail snail)

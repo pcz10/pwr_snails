@@ -29,12 +29,15 @@ public class Meadow implements Runnable
 		fillListOfGrassFields();
 	}
 	
-	public synchronized void increaseGrassLevel()
+	public void increaseGrassLevel()
 	{
 		for(Grass grass : this.listOfGrassFields)
 		{
-			if(!(grass.isTaken()) && !(grass.getColor() == World.grassColors[0]))
-				grass.setColor(World.grassColors[findActualGrassColor(grass)-1]);
+			synchronized (grass)
+			{
+				if(!(grass.isTaken()) && !(grass.getColor() == World.grassColors[0]))
+					grass.setColor(World.grassColors[findActualGrassColor(grass)-1]);
+			}
 		}
 	}
 	public int findActualGrassColor(Grass grass)

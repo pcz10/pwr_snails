@@ -19,7 +19,7 @@ public class Snail implements Runnable
 	public void run() 
 	{
 		threadID = Thread.currentThread().getId();
-		
+		ControlPanel.world.moveSnail(this);
 		while(true)
 		{
 			if(ControlPanel.world.getSnailsAppetite()>0)
